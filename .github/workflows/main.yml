@@ -29,6 +29,8 @@ jobs:
 
             - name: Build project
               run: npm run build
+            - name: Disable host key checking
+                run: echo -e "Host *\n  StrictHostKeyChecking no\n" >> ~/.ssh/config
 
             - name: Deploy
               env:

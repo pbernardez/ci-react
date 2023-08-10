@@ -34,6 +34,6 @@ jobs:
               env:
                   SSH_KEY: ${{ secrets.SSH_KEY }}
               run: |
-                  echo "${{ secrets.SSH_KEY }}" | tr -d '\r' > ssh_key.pem
+                  echo "$SSH_KEY" > ssh_key.pem
                   chmod 600 ssh_key.pem
                   scp -i ssh_key.pem -r build ubuntu@18.198.17.3:/var/www

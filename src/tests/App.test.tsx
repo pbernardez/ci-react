@@ -7,7 +7,6 @@ const Dummy = () => {
 test('renders dummy component', () => {
     const { getByText } = render(<Dummy />);
 
-    // Verifica que el mensaje se muestre en la pantalla
     const messageElement = getByText(/Hello, world!/i);
     expect(messageElement).toBeInTheDocument();
 });

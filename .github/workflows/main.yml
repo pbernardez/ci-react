@@ -47,4 +47,5 @@ jobs:
                   echo "$SSH_KEY" > ssh_key.pem
                   chmod 600 ssh_key.pem
                   scp -i ssh_key.pem -r dist ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
+                  ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} sudo rm -r /var/www/html/*
                   ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} sudo mv /home/ubuntu/web/dist/* /var/www/html

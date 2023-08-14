@@ -57,3 +57,4 @@ jobs:
                   echo "$SSH_KEY" > ssh_key.pem
                   chmod 600 ssh_key.pem
                   ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} docker build -t ci-react /home/ubuntu/web
+                  ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} docker run -d -p 80:80 ci-react

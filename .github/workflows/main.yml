@@ -40,7 +40,7 @@ jobs:
               run: |
                   ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-            - name: Deploy
+            - name: Upload dist folder and Dockerfile
               env:
                   SSH_KEY: ${{ secrets.SSH_KEY }}
               run: |
@@ -48,3 +48,11 @@ jobs:
                   chmod 600 ssh_key.pem
                   scp -i ssh_key.pem -r dist ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
                   scp -i ssh_key.pem -r Dockerfile ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
+
+            - name: Create Docker image
+              env:
+                  SSH_KEY: ${{ secrets.SSH_KEY }}
+              run: |
+                  echo "$SSH_KEY" > ssh_key.pem
+                  chmod 600 ssh_key.pem
+                  ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} docker build -t ci-react /home/ubuntu/web

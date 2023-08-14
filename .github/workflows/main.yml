@@ -46,4 +46,4 @@ jobs:
               run: |
                   echo "$SSH_KEY" > ssh_key.pem
                   chmod 600 ssh_key.pem
-                  scp -i ssh_key.pem -r build ubuntu@18.198.17.3:/var/www
+                  scp -i ssh_key.pem -r build ubuntu@${{ secrets.SSH_KEY }}:/var/www

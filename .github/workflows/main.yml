@@ -48,6 +48,7 @@ jobs:
                   chmod 600 ssh_key.pem
                   scp -i ssh_key.pem -r dist ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
                   scp -i ssh_key.pem -r Dockerfile ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
+                  scp -i ssh_key.pem -r configs ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
 
             - name: Create Docker image
               env:

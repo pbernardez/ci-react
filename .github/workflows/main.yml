@@ -40,21 +40,23 @@ jobs:
               run: |
                   ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-            - name: Upload dist folder and Dockerfile
+            - name: Upload project files
               env:
                   SSH_KEY: ${{ secrets.SSH_KEY }}
               run: |
                   echo "$SSH_KEY" > ssh_key.pem
                   chmod 600 ssh_key.pem
-                  scp -i ssh_key.pem -r dist ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
-                  scp -i ssh_key.pem -r Dockerfile ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
-                  scp -i ssh_key.pem -r configs ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
+                  scp -i ssh_key.pem -r dist Dockerfile configs ubuntu@${{ secrets.SSH_HOST }}:/home/ubuntu/web
 
-            - name: Create Docker image
+            - name: Create Docker image and run container
               env:
                   SSH_KEY: ${{ secrets.SSH_KEY }}
               run: |
                   echo "$SSH_KEY" > ssh_key.pem
                   chmod 600 ssh_key.pem
-                  ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} docker build -t ci-react /home/ubuntu/web
-                  ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} docker run -d -p 80:80 ci-react
+                  ssh -i ssh_key.pem ubuntu@${{ secrets.SSH_HOST }} << EOF
+                    docker stop $(docker ps -q --filter "ancestor=ci-react")
+                    cd /home/ubuntu/web
+                    docker build -t ci-react .
+                    docker run -d -p 3000:80 ci-react
+                  EOF
